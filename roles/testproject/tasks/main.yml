@@ -1,0 +1,25 @@
+
+  - name: Make sure we have a 'sudoers' group
+    group:
+      name: sudoers
+      state: present
+
+  - name: Allow 'sudoers' group to have passwordless sudo
+    lineinfile:
+      dest: /etc/sudoers
+      state: present
+      regexp: '^%sudoers'
+      line: '%sudoers ALL=(ALL) NOPASSWD: ALL'
+      validate: visudo -cf %s
+
+  - name: Create user 'testuser' of group 'sudoers'
+    user:
+      name: testuser
+      groups: sudoers
+      state: present
+
+  - name: Set authorized key took from file
+    authorized_key:
+      user: testuser
+      state: present
+      key: "{{ lookup('file', '~/git/ansible-test/test_user/id_rsa.pub') }}"

@@ -1,0 +1,21 @@
+- name: apply testproject roles to all webservers
+  hosts: webservers
+  remote_user: root
+  roles:
+  - testproject
+
+- name: install nginx on webservers
+  hosts: webservers
+  remote_user: root
+  roles:
+  - nginx
+
+- name: install unattended upgrades on webservers
+  hosts: webservers
+  vars:
+    unattended_origins_patterns:
+    - 'origin=Ubuntu,archive=${distro_codename}-security'
+    - 'o=Ubuntu,a=${distro_codename}-updates'
+  remote_user: root
+  roles:
+  - unattended-upgrades
