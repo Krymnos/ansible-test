@@ -1,2 +1,2 @@
 # ansible-test
-test
+run > ansible-playbook site.yml
